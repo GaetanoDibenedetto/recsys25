@@ -1,3 +1,131 @@
+
+def compute_reccomended_weight(
+    gender="M",
+    age=25,
+    min_hand_floor_distance_vertical=None,
+    vertical_lifting_distance=None,
+    max_orizontal_hands_mid_ankle_distance=None,
+    torso_torsion=0,
+    judgment="intermediate",
+    lifting_frequency=1,
+    etm=1,
+    one_limb_lifting=False,
+    two_operators_lifting=False,
+):
+    """
+    This function computes the recommended weight for a person based on the inputs provided.
+
+    Args:
+        gender (str, optional): M for man or W for woman. Defaults to "M".
+        age (int, optional): age of the subject lifting the package. Defaults to 25.
+        min_hand_floor_distance_vertical (_type_, optional): minimum vertical distance from hands to floor. Defaults to None.
+        vertical_lifting_distance (_type_, optional): vertical distance of lifting. Defaults to None.
+        max_orizontal_hands_mid_ankle_distance (_type_, optional): maximum horizontal distance between hands and mid hankles. Defaults to None.
+        torso_torsion (int, optional): torsion of torso (in degrees). Defaults to 0.
+        judgment (str, optional): subjective judgment for the lifting, could it be "good", "intermediate" or "bad". Defaults to "intermediate".
+        lifting_frequency (int, optional): lifting frequency (number of lifts per minute) in relation to duration. Defaults to 1.
+        etm (int, optional): multiplier for MMC times over 480 min. Defaults to 1.
+        one_limb_lifting (bool, optional): lifts with only one limb. Defaults to False.
+        two_operators_lifting (bool, optional): lifted by two operators. Defaults to False.
+
+    Returns:
+        double: value in kg of the recommended weight
+    """
+
+    assert gender in ["M", "W"]
+    assert age > 0
+    assert min_hand_floor_distance_vertical is not None
+    assert vertical_lifting_distance is not None
+    assert max_orizontal_hands_mid_ankle_distance is not None
+    assert torso_torsion >= 0
+    assert judgment in ["good", "intermediate", "bad"]
+    assert lifting_frequency > 0
+    assert etm > 0
+    assert isinstance(one_limb_lifting, bool)
+    assert isinstance(two_operators_lifting, bool)
+
+    lc = get_cp_score(gender, age)
+    vm = 0 if min_hand_floor_distance_vertical > 175 else 1 - (0.003 * abs(min_hand_floor_distance_vertical - 75))
+    dm = 1 if vertical_lifting_distance <= 25 else (0 if vertical_lifting_distance > 175 else 0.82 + (4.5/vertical_lifting_distance))
+    hm = 1 if max_orizontal_hands_mid_ankle_distance <= 25 else (0 if max_orizontal_hands_mid_ankle_distance > 63 else 25/max_orizontal_hands_mid_ankle_distance)
+    am = 0 if torso_torsion > 135 else 1 - (0.0032 * torso_torsion)
+    cm = get_cm_score(judgment)
+    fm = get_fm_score(lifting_frequency)
+    etm = get_etm_score(etm)
+    om = get_om_score(one_limb_lifting)
+    pm = get_pm_score(two_operators_lifting)
+
+    recommended_weight = lc * vm * dm * hm * am * cm * fm * etm * om * pm
+    
+    # print(round(lc, 2), round(vm, 2), round(dm, 2), round(hm, 2), round(am, 2), round(cm, 2), round(fm, 2), round(etm, 2), round(om, 2), round(pm, 2))
+    return recommended_weight
+
+
+def compute_reccomended_weight_simplified(
+    gender="M",
+    age=25,
+    min_hand_floor_distance_vertical=None,
+    vertical_lifting_distance=None,
+    max_orizontal_hands_mid_ankle_distance=None,
+    torso_torsion=0,
+    judgment="intermediate",
+    lifting_frequency=1,
+    etm=1,
+    one_limb_lifting=False,
+    two_operators_lifting=False,
+):
+    """
+    This function computes the recommended weight for a person based on the inputs provided.
+
+    Args:
+        gender (str, optional): M for man or W for woman. Defaults to "M".
+        age (int, optional): age of the subject lifting the package. Defaults to 25.
+        min_hand_floor_distance_vertical (_type_, optional): minimum vertical distance from hands to floor. Defaults to None.
+        vertical_lifting_distance (_type_, optional): vertical distance of lifting. Defaults to None.
+        max_orizontal_hands_mid_ankle_distance (_type_, optional): maximum horizontal distance between hands and mid hankles. Defaults to None.
+        torso_torsion (int, optional): torsion of torso (in degrees). Defaults to 0.
+        judgment (str, optional): subjective judgment for the lifting, could it be "good", "intermediate" or "bad". Defaults to "intermediate".
+        lifting_frequency (int, optional): lifting frequency (number of lifts per minute) in relation to duration. Defaults to 1.
+        etm (int, optional): multiplier for MMC times over 480 min. Defaults to 1.
+        one_limb_lifting (bool, optional): lifts with only one limb. Defaults to False.
+        two_operators_lifting (bool, optional): lifted by two operators. Defaults to False.
+
+    Returns:
+        double: value in kg of the recommended weight
+    """
+
+    assert gender in ["M", "W"]
+    assert age > 0
+    assert min_hand_floor_distance_vertical is not None
+    assert vertical_lifting_distance is not None
+    assert max_orizontal_hands_mid_ankle_distance is not None
+    assert torso_torsion >= 0
+    assert judgment in ["good", "intermediate", "bad"]
+    assert lifting_frequency > 0
+    assert etm > 0
+    assert isinstance(one_limb_lifting, bool)
+    assert isinstance(two_operators_lifting, bool)
+
+    cp = get_cp_score(gender, age)
+    vm = get_vm_score(min_hand_floor_distance_vertical)
+    dm = get_dm_score(vertical_lifting_distance)
+    hm = get_hm_score(max_orizontal_hands_mid_ankle_distance)
+    am = get_am_score(torso_torsion)
+    cm = get_cm_score(judgment)
+    fm = get_fm_score(lifting_frequency)
+    etm = get_etm_score(etm)
+    om = get_om_score(one_limb_lifting)
+    pm = get_pm_score(two_operators_lifting)
+
+    recommended_weight = cp * vm * dm * hm * am * cm * fm * etm * om * pm
+
+    print(round(cp, 2), round(vm, 2), round(dm, 2), round(hm, 2), round(am, 2), round(cm, 2), round(fm, 2), round(etm, 2), round(om, 2), round(pm, 2))
+
+    return recommended_weight
+
+
+
+
 def get_cp_score(gender, age):
     if gender == "M":
         if 20 <= age <= 45:
@@ -183,132 +311,6 @@ def get_pm_score(pm):
         return 0.85
     else:
         return 1
-
-
-def compute_reccomended_weight(
-    gender="M",
-    age=25,
-    min_hand_floor_distance_vertical=None,
-    vertical_lifting_distance=None,
-    max_orizontal_hands_mid_ankle_distance=None,
-    torso_torsion=0,
-    judgment="intermediate",
-    lifting_frequency=1,
-    etm=1,
-    one_limb_lifting=False,
-    two_operators_lifting=False,
-):
-    """
-    This function computes the recommended weight for a person based on the inputs provided.
-
-    Args:
-        gender (str, optional): M for man or W for woman. Defaults to "M".
-        age (int, optional): age of the subject lifting the package. Defaults to 25.
-        min_hand_floor_distance_vertical (_type_, optional): minimum vertical distance from hands to floor. Defaults to None.
-        vertical_lifting_distance (_type_, optional): vertical distance of lifting. Defaults to None.
-        max_orizontal_hands_mid_ankle_distance (_type_, optional): maximum horizontal distance between hands and mid hankles. Defaults to None.
-        torso_torsion (int, optional): torsion of torso (in degrees). Defaults to 0.
-        judgment (str, optional): subjective judgment for the lifting, could it be "good", "intermediate" or "bad". Defaults to "intermediate".
-        lifting_frequency (int, optional): lifting frequency (number of lifts per minute) in relation to duration. Defaults to 1.
-        etm (int, optional): multiplier for MMC times over 480 min. Defaults to 1.
-        one_limb_lifting (bool, optional): lifts with only one limb. Defaults to False.
-        two_operators_lifting (bool, optional): lifted by two operators. Defaults to False.
-
-    Returns:
-        double: value in kg of the recommended weight
-    """
-
-    assert gender in ["M", "W"]
-    assert age > 0
-    assert min_hand_floor_distance_vertical is not None
-    assert vertical_lifting_distance is not None
-    assert max_orizontal_hands_mid_ankle_distance is not None
-    assert torso_torsion >= 0
-    assert judgment in ["good", "intermediate", "bad"]
-    assert lifting_frequency > 0
-    assert etm > 0
-    assert isinstance(one_limb_lifting, bool)
-    assert isinstance(two_operators_lifting, bool)
-
-    lc = get_cp_score(gender, age)
-    vm = 0 if min_hand_floor_distance_vertical > 175 else 1 - (0.003 * abs(min_hand_floor_distance_vertical - 75))
-    dm = 1 if vertical_lifting_distance <= 25 else (0 if vertical_lifting_distance > 175 else 0.82 + (4.5/vertical_lifting_distance))
-    hm = 1 if max_orizontal_hands_mid_ankle_distance <= 25 else (0 if max_orizontal_hands_mid_ankle_distance > 63 else 25/max_orizontal_hands_mid_ankle_distance)
-    am = 0 if torso_torsion > 135 else 1 - (0.0032 * torso_torsion)
-    cm = get_cm_score(judgment)
-    fm = get_fm_score(lifting_frequency)
-    etm = get_etm_score(etm)
-    om = get_om_score(one_limb_lifting)
-    pm = get_pm_score(two_operators_lifting)
-
-    recommended_weight = lc * vm * dm * hm * am * cm * fm * etm * om * pm
-    
-    # print(round(lc, 2), round(vm, 2), round(dm, 2), round(hm, 2), round(am, 2), round(cm, 2), round(fm, 2), round(etm, 2), round(om, 2), round(pm, 2))
-    return recommended_weight
-
-
-def compute_reccomended_weight_simplified(
-    gender="M",
-    age=25,
-    min_hand_floor_distance_vertical=None,
-    vertical_lifting_distance=None,
-    max_orizontal_hands_mid_ankle_distance=None,
-    torso_torsion=0,
-    judgment="intermediate",
-    lifting_frequency=1,
-    etm=1,
-    one_limb_lifting=False,
-    two_operators_lifting=False,
-):
-    """
-    This function computes the recommended weight for a person based on the inputs provided.
-
-    Args:
-        gender (str, optional): M for man or W for woman. Defaults to "M".
-        age (int, optional): age of the subject lifting the package. Defaults to 25.
-        min_hand_floor_distance_vertical (_type_, optional): minimum vertical distance from hands to floor. Defaults to None.
-        vertical_lifting_distance (_type_, optional): vertical distance of lifting. Defaults to None.
-        max_orizontal_hands_mid_ankle_distance (_type_, optional): maximum horizontal distance between hands and mid hankles. Defaults to None.
-        torso_torsion (int, optional): torsion of torso (in degrees). Defaults to 0.
-        judgment (str, optional): subjective judgment for the lifting, could it be "good", "intermediate" or "bad". Defaults to "intermediate".
-        lifting_frequency (int, optional): lifting frequency (number of lifts per minute) in relation to duration. Defaults to 1.
-        etm (int, optional): multiplier for MMC times over 480 min. Defaults to 1.
-        one_limb_lifting (bool, optional): lifts with only one limb. Defaults to False.
-        two_operators_lifting (bool, optional): lifted by two operators. Defaults to False.
-
-    Returns:
-        double: value in kg of the recommended weight
-    """
-
-    assert gender in ["M", "W"]
-    assert age > 0
-    assert min_hand_floor_distance_vertical is not None
-    assert vertical_lifting_distance is not None
-    assert max_orizontal_hands_mid_ankle_distance is not None
-    assert torso_torsion >= 0
-    assert judgment in ["good", "intermediate", "bad"]
-    assert lifting_frequency > 0
-    assert etm > 0
-    assert isinstance(one_limb_lifting, bool)
-    assert isinstance(two_operators_lifting, bool)
-
-    cp = get_cp_score(gender, age)
-    vm = get_vm_score(min_hand_floor_distance_vertical)
-    dm = get_dm_score(vertical_lifting_distance)
-    hm = get_hm_score(max_orizontal_hands_mid_ankle_distance)
-    am = get_am_score(torso_torsion)
-    cm = get_cm_score(judgment)
-    fm = get_fm_score(lifting_frequency)
-    etm = get_etm_score(etm)
-    om = get_om_score(one_limb_lifting)
-    pm = get_pm_score(two_operators_lifting)
-
-    recommended_weight = cp * vm * dm * hm * am * cm * fm * etm * om * pm
-
-    print(round(cp, 2), round(vm, 2), round(dm, 2), round(hm, 2), round(am, 2), round(cm, 2), round(fm, 2), round(etm, 2), round(om, 2), round(pm, 2))
-
-    return recommended_weight
-
 
 if __name__ == "__main__":
     import random
