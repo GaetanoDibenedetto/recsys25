@@ -1,0 +1,10 @@
+easy_ViTPose @ git+https://github.com/JunkyByte/easy_ViTPose.git
+huggingface-hub==0.22.2
+numpy==1.26.0
+opencv-python==4.8.0.76
+ultralytics==8.2.70
+enlighten==1.13.0
+scikit-image==0.21.0
+filterpy==1.4.5
+ffmpeg==1.4
+clip @ git+https://github.com/ultralytics/CLIP.git@092b5fee65f85fc0020920af395b162366d4bc16
