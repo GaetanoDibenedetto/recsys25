@@ -33,9 +33,6 @@ For each video, the ergonomists answered the following questions:
 4. **How appropriate was the system’s recommendation for addressing the observed posture issue?**  
    (1 = Very inappropriate | 2 = Inappropriate | 3 = Neutral | 4 = Appropriate | 5 = Very appropriate)
 
-5. **Did the system’s recommendation align with your own assessment?**  
-   (Yes/No: *[If "No," open-ended response]*)
-
 ---
 
 ### Questions for Overall System Evaluation
