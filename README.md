@@ -15,6 +15,66 @@ This repository contains the official implementation of our paper **"Lift It Up 
 
 ---
 
+## 📚 Background: Ergonomic Principles
+
+Our system is grounded in the **Revised NIOSH Lifting Equation (RNLE)**, a widely accepted standard in ergonomics for evaluating lifting safety.
+
+### Lifting Index (LI)
+
+The **Lifting Index (LI)** is used to assess the risk associated with a lifting task:
+
+$$
+LI = \frac{\text{Load Weight}}{\text{RWL}}
+$$
+
+Where:
+- **Load Weight** is the actual weight lifted.
+- **RWL** is the **Recommended Weight Limit**, a value that varies depending on posture.
+
+### Recommended Weight Limit (RWL)
+
+RWL is calculated as:
+
+```
+RWL = LC × HM × VM × DM × AM × FM × CM
+```
+
+Each multiplier adjusts the baseline weight limit (LC) according to posture.
+
+### RWL Multipliers
+
+| Symbol | Multiplier Description | Formula or Source |
+|--------|-------------------------|-------------------|
+| `LC`   | Load Constant – the maximum recommended weight under ideal conditions | Based on age and gender (see below) |
+| `HM`   | Horizontal Multiplier – based on hand distance from ankles | $$\frac{25}{H}$$ |
+| `VM`   | Vertical Multiplier – based on hand height from the floor | $$1 - (0.003 \times \left\lvert V - 75 \right\lvert)$$ |
+| `DM`   | Distance Multiplier – based on hand vertical travel distance | $$0.82 + \frac{4.5}{D}$$ |
+| `AM`   | Asymmetric Multiplier – based on torso rotation angle | $$1 - (0.0032 \times A)$$ |
+| `FM`   | Frequency Multiplier – based on number of lifts per minute | See Table 5 - Chapter 3 in [RNLE guide](https://www.cdc.gov/niosh/docs/94-110/) |
+| `CM`   | Coupling Multiplier – based on grip quality |  See Table 7 - Chapter 3 in [RNLE guide](https://www.cdc.gov/niosh/docs/94-110/) |
+
+Where:
+- `H` is horizontal reach (cm)
+- `V` is vertical height (cm)
+- `D` is vertical distance traveled (cm)
+- `A` is asymmetry angle (degrees)
+
+
+#### 🔢 Load Constant (LC)
+
+From the [RNLE guide](https://www.cdc.gov/niosh/docs/94-110/), the default Load Constant is **23 kg**.  
+However, we adopt the approach from [ISO 11228](https://www.iso.org/standard/76820.html), which introduces personalization based on the subject’s **age** and **gender**:
+
+```python
+if gender == "M":
+    LC = 25 if 20 <= age <= 45 else 20
+elif gender == "W":
+    LC = 20 if 20 <= age <= 45 else 15
+```
+
+---
+
+
 ## 📊 Evaluation
 
 ### Questions for Video-Specific Evaluation
@@ -76,44 +136,4 @@ Install with:
 ```bash
 pip install -r requirements-python3_11.txt
 ```
-
----
-
-## 🚀 Running the System
-
-To reproduce the experiments and run the full pipeline, simply execute:
-
-```bash
-python main.py
-```
-
-Make sure the dataset is correctly placed and extracted before running.
-
----
-
-## 📁 Project Structure (Optional)
-
-You may also include a short breakdown of key files/folders:
-
-```
-main.py                      # Main script to run experiments
-archives_data/               # Folder for dataset archives
-requirements-python3_11.txt  # Environment dependencies
-...
-```
-
----
-
-## 📄 License
-
-Include your preferred license here (e.g., MIT, Apache-2.0, etc.)
-
----
-
-## 📬 Contact
-
-For questions or collaborations, feel free to reach out:
-
-- Your Name – your.email@domain.com  
-- [LinkedIn or Website (optional)]
 
