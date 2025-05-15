@@ -73,7 +73,37 @@ elif gender == "W":
 ```
 
 ---
+## 📢 Recommendations
 
+Our system provides **visual** and **textual** lifting posture recommendations aimed at reducing the Lifting Index (**LI**) below a safety threshold.
+
+### 🔍 How It Works
+
+* The system analyzes two key frames of the lifting motion: the **start** and **end** of the lift.
+* For each frame, it computes three posture-dependent parameters:
+
+  * `H`: horizontal distance of the hands from the ankles
+  * `V`: vertical height of the hands from the floor
+  * `D`: vertical travel distance between the start and end points
+
+By gradually adjusting the **hand position**, which most strongly influences LI, the system identifies posture corrections that reduce LI below a configurable threshold (`τ = 0.7` for evaluation, assuming a 10 kg load).
+
+### 🧠 Graphical Adjustments
+
+* When the hands move, **surrounding joints**—such as the shoulders, elbows, and hips—are also displaced **proportionally** to maintain anatomical plausibility.
+
+### 📝 Textual Recommendation
+
+Textual feedback is generated based on the difference in joint positions between the original and adjusted postures. A rule-based approach is used to produce readable, body-part-specific instructions:
+
+* If the hands move, the system generates a corresponding textual description.
+* If nearby joints like the shoulders, elbows, or hips shift, these are also mentioned.
+* For the knees, the system computes the change in joint angle between the original and adjusted poses and describes the change in flexion.
+
+This structured feedback helps users understand not only what to change, but also how those changes affect their overall posture.
+
+
+---
 
 ## 📊 Evaluation
 
