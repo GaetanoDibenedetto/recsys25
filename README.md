@@ -9,6 +9,7 @@ This repository contains the official implementation of our paper **"Lift It Up 
 
 ## 📦 Dataset
 
+- The dataset has passed the privacy and ethical approval process by our organization's review team.
 - The dataset will be **released upon paper acceptance**.
 - Once available, place all dataset archives inside the `archives_data/` folder.
 - **Important:** All `.zip` files should be extracted in-place (in the same folder where they were downloaded).
