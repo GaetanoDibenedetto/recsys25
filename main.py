@@ -2187,4 +2187,5 @@ rmse = np.sqrt(np.mean((rwl_pred - rwl_true) ** 2))
 
 
 print(f"MAE:  {mae:.2f}")
+
 print(f"RMSE: {rmse:.2f}")
