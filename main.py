@@ -1695,6 +1695,8 @@ for video_counter, video in enumerate(list_video[::-1]):  # list_video[::-1]
         ]
 
         rec_weight = compute_reccomended_weight(
+            gender=annotations[video_name]["subject_gender"],
+            age=annotations[video_name]["subject_age"],            
             min_hand_floor_distance_vertical=min_vertical_distance,
             vertical_lifting_distance=lifting_vertical_distance,
             max_orizontal_hands_mid_ankle_distance=horizontal_distance,
@@ -1705,6 +1707,11 @@ for video_counter, video in enumerate(list_video[::-1]):  # list_video[::-1]
             "rec_weight": rec_weight,
             "max_horizontal_distance_frame": max_horizontal_distance_frame,
             "min_vertical_distance_frame": min_vertical_distance_frame,
+            "rec_measures": {
+                "lifting_vertical_distance": lifting_vertical_distance,
+                "horizontal_distance": horizontal_distance,
+                "min_vertical_distance": min_vertical_distance,
+            },
         }
 
     def move_nearby_points(
@@ -1805,7 +1812,7 @@ for video_counter, video in enumerate(list_video[::-1]):  # list_video[::-1]
 
         # for i in range(1000):
         temp_pose = [deepcopy(pose_start_lifting), deepcopy(pose_end_lifting)]
-        while (input_weight/obtain_recommended_weight_from_keypoints(temp_pose[0], temp_pose[1])["rec_weight"] > index_threshold):
+        while (input_weight/obtain_recommended_weight_from_keypoints(temp_pose[0], temp_pose[1])["rec_weight"] > index_threshold) and count < 100000:
             # while obtain_recommended_weight_and_distances_from_keypoints(temp_side_hand, temp_side_foot, temp_left_ankle, temp_right_ankle) <= gt:
             # if count > 1000:
             #     return None, None
@@ -1881,7 +1888,7 @@ for video_counter, video in enumerate(list_video[::-1]):  # list_video[::-1]
         wrong_skeleton_color_palette = "plasma"
         correct_points_color_palette = "Greens_r"        
         correct_skeleton_color_palette = "Accent"
-        
+
         drawed_img = []
         for pose in [pose_start_lifting, pose_end_lifting]:
             drawed_img.append(
@@ -1928,7 +1935,7 @@ for video_counter, video in enumerate(list_video[::-1]):  # list_video[::-1]
             "overlap_poses": overlap_drawed_img,
         }
 
-        def get_textual_recommendation(old_poses, new_poses, side_first_view):
+        def get_textual_recommendation(old_poses, new_poses, side_first_view, original_pose_li, new_pose_li):
             def get_body_part_distances(old_pose, new_pose, body_part_name):
                 old_part = landmark_vitpose(old_pose, body_part_name, dataset_name=DATASET)[0]
                 new_part = landmark_vitpose(new_pose, body_part_name, dataset_name=DATASET)[0]
@@ -1969,24 +1976,25 @@ for video_counter, video in enumerate(list_video[::-1]):  # list_video[::-1]
                         direction = "farther from your body"
                     else:
                         direction = "closer to your body"
-                    text += f"• Move your hands {round(abs(hand_distance[0])*cm_per_pixel)}cm {direction}."
+                    text += f"\n• Move your hands at least {round(abs(hand_distance[0])*cm_per_pixel)}cm {direction}."
                 elif abs(hand_distance[1]) > 0:
                     index = 1 # Vertical
                     direction = "up" if hand_distance[1] > 0 else "down"
-                    text += f"• Move your hands {round(abs(hand_distance[1])*cm_per_pixel)}cm {direction}."
+                    text += f"\n• Move your hands at least {round(abs(hand_distance[1])*cm_per_pixel)}cm {direction}."
                 else:
                     continue
                 shoulder_distance = round(abs(shoulder_distance[index])*cm_per_pixel)
                 elbow_distance = round(abs(elbow_distance[index])*cm_per_pixel)
-                text += f"• This adjustment will likely also move your shoulders ({shoulder_distance}cm) and elbows ({elbow_distance}cm) {direction}."
+                text += f"\n• This adjustment will likely also move your shoulders ({shoulder_distance}cm) and elbows ({elbow_distance}cm) {direction}."
                 hip_distance = round(abs(hip_distance[index])*cm_per_pixel)
-                text += f"• You should force your hips to shift by {hip_distance}cm in the same direction."
+                text += f"\n• You should actively shift your hips approximately {hip_distance-2}-{hip_distance+2}cm in the same direction."
 
                 # Knee angle variation output
                 if abs(knee_angle_diff) > 3:  # Threshold to avoid noise
                     flexion = "increase" if knee_angle_diff > 0 else "decrease"
-                    text += f"• This posture change leads to a {flexion} in knee flexion of about {abs(knee_angle_diff):.1f}°."
+                    text += f"\n• This posture change leads to a {flexion} in knee flexion of about {abs(knee_angle_diff):.1f}°."
                 rec_text.append(text)
+            rec_text.insert(0, f"Lifting Index Original Pose: {original_pose_li:.2f}; Recommended Pose Lifting Index: {new_pose_li:.2f}\n")
             return rec_text
 
         return temp_pose_results, draws, get_textual_recommendation([pose_start_lifting, pose_end_lifting], new_poses, side_first_view)
