@@ -9,7 +9,7 @@ This repository contains the official implementation of our paper **"Lift It Up 
 
 ## 📦 Dataset
 
-- The dataset has passed the privacy and ethical approval process by our organization's review team.
+- The dataset has undergone a privacy and ethics review and was approved by TU Delft institutional review board.
 - The dataset will be **released upon paper acceptance**.
 - Once available, place all dataset archives inside the `archives_data/` folder.
 - **Important:** All `.zip` files should be extracted in-place (in the same folder where they were downloaded).
@@ -152,8 +152,8 @@ At the end of the evaluation, the ergonomists answered the following questions t
 ### 1. Clone the repository:
 
 ```bash
-git clone https://github.com/anonymus/rep_name
-cd rep_name
+git clone https://github.com/GaetanoDibenedetto/recsys25.git
+cd recsys25
 ```
 
 ### 2. Install dependencies
@@ -168,3 +168,30 @@ Install with:
 pip install -r requirements-python3_11.txt
 ```
 
+## 📬 Contact
+
+For questions, issues, or collaboration opportunities, contact:
+
+- Gaetano Dibenedetto – gaetano.dibenedetto@uniba.it
+- [Personal Web Page](https://gaetanodibenedetto.github.io/) - [Linkedin](https://www.linkedin.com/in/gaetano-dibenedetto/)
+
+## Citing Us
+
+BibTeX format:
+
+```bash
+@inproceedings{DBLP:conf/recsys/Dibenedetto25RecSys,
+  author       = {Gaetano Dibenedetto and Pasquale Lops and Marco Polignano and Helma Torkamaan},
+  title        = {Lift It Up Right: A Recommender System for Safer Lifting Postures},
+  booktitle    = {Proceedings of the 19th {ACM} Conference on Recommender Systems, RecSys 2025, Prague, Czech Republic, September 22–26, 2025},
+  publisher    = {{ACM}},
+  year         = {2025},
+  url          = {https://doi.org/10.1145/3705328.3759314},
+  doi          = {10.1145/3705328.3759314}
+}
+```
+
+ACM Reference Format:
+```bash
+Gaetano Dibenedetto, Pasquale Lops, Marco Polignano, and Helma Torkamaan. 2025. Lift It Up Right: A Recommender System for Safer Lifting Postures. In Proceedings of the Nineteenth ACM Conference on Recommender Systems (RecSys ’25), September 22–26, 2025, Prague, Czech Republic. ACM, New York, NY, USA, 6 pages. https://doi.org/10.1145/3705328.3759314
+```
