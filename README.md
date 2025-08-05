@@ -21,10 +21,31 @@ This repository contains the official implementation of our paper **"Lift It Up 
 ## 📦 Dataset
 
 - The dataset has undergone a privacy and ethics review and was approved by TU Delft institutional review board.
-- The dataset will be **released upon paper acceptance**.
-- Once available, place all dataset archives inside the `archives_data/` folder.
-- **Important:** All `.zip` files should be extracted in-place (in the same folder where they were downloaded).
-
+- The dataset is published on [ZENODO](https://zenodo.org/records/16743120).
+- After downloading, place all dataset archives inside the `archives_data/` folder and extract them in place. After extraction, the folder structure should look like this:
+```
+└── archives_data/
+    ├── annotations.json                
+    │
+    └── anonymized/
+        ├── video_env_1_anonymized/            
+        │   ├── gd_0013.mp4
+        │   ├── ap_0017.mp4
+        │   └── ...
+        │
+        ├── video_env_1_oblique_anonymized/    
+        │   ├── gd_0020.mp4
+        │   ├── ap_0013.mp4
+        │   └── ...
+        │
+        ├── video_env_3_anonymized/            
+        │   ├── vp_0006_dg.mp4
+        │   ├── mp_0003_gd.mp4
+        │   └── ...
+        │
+        └── video_env_3_oblique_anonymized/    
+            ├── ...
+```
 ---
 
 ## 📚 Background: Ergonomic Principles
@@ -190,7 +211,7 @@ For questions, issues, or collaboration opportunities, contact:
 
 BibTeX format:
 
-```bash
+```
 @inproceedings{DBLP:conf/recsys/Dibenedetto25RecSys,
   author       = {Gaetano Dibenedetto and Pasquale Lops and Marco Polignano and Helma Torkamaan},
   title        = {Lift It Up Right: A Recommender System for Safer Lifting Postures},
@@ -202,7 +223,8 @@ BibTeX format:
 }
 ```
 
+
 ACM Reference Format:
-```bash
+```
 Gaetano Dibenedetto, Pasquale Lops, Marco Polignano, and Helma Torkamaan. 2025. Lift It Up Right: A Recommender System for Safer Lifting Postures. In Proceedings of the Nineteenth ACM Conference on Recommender Systems (RecSys ’25), September 22–26, 2025, Prague, Czech Republic. ACM, New York, NY, USA, 6 pages. https://doi.org/10.1145/3705328.3759314
 ```
