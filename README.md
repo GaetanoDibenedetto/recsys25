@@ -1,4 +1,7 @@
 [![CC BY-NC-SA 4.0][cc-by-nc-sa-shield]][cc-by-nc-sa]
+<a href="https://zenodo.org/records/16743120"><img src="https://img.shields.io/badge/Dataset-Zenodo-darkgreen"/></a>
+<a href="pdf/paper.pdf"><img src="https://img.shields.io/badge/Paper-PDF-blue"/></a>
+<a href="pdf/Poster.pdf"><img src="https://img.shields.io/badge/Poster-PDF-red"/></a>
 
 This work is licensed under a
 [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License][cc-by-nc-sa].
